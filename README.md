@@ -1,6 +1,7 @@
 # FSharpCoreMissingParts
 
-FSharpCoreMissingParts is a collection of various useful functions intended to fill missing parts of the F# Core library.
+FSharpCoreMissingParts is a collection of various useful functions intended to fill missing parts
+of the F# Core library.
 
 ## Installation
 
@@ -33,7 +34,8 @@ open FSharpCoreMissingParts.Casting
 
 ### `tryBinarySearch`
 
-Performs a binary search within the specified array.  The array must be sorted, otherwise the result can be wrong.
+Performs a binary search within the specified array.  The array must be sorted, otherwise the result
+can be wrong.
 
 ```fsharp
 > [|1 .. 100|] |> Array.tryBinarySearch 42;;
@@ -42,7 +44,8 @@ val it : int option = Some 41
 
 ### `tryBinarySearchWith`
 
-Performs a binary search within the specified array using an external compare function.  The array must be sorted, otherwise the result can be wrong.
+Performs a binary search within the specified array using an external compare function.  The array
+must be sorted, otherwise the result can be wrong.
 
 ```fsharp
 > let reverseCompare a b = compare b a
@@ -119,7 +122,9 @@ Returns the actual data stored in the current node.
 
 ### `next`
 
-Returns the next node in the list. Since the list is circular, calling `next` on the last element will seamlessly point back to the first element, allowing for infinite traversal without encountering `null` or `None`.
+Returns the next node in the list. Since the list is circular, calling `next` on the last element 
+will seamlessly point back to the first element, allowing for infinite traversal without 
+encountering `null` or `None`.
 
 ## List
 
@@ -137,7 +142,8 @@ val it : (int * int) list = [(1, 2); (2, 3); (3, 1)]
 
 ### `crossMap`
 
-Applies a mapper function to the Cartesian product of two lists.  Equivalent to `allPairs` + `map`.
+Applies a mapper function to the Cartesian product of two lists.  Equivalent to `allPairs` followed
+by `map`.
 
 ```fsharp
 > List.crossMap (+) [1; 2] [10; 20];;
@@ -150,23 +156,47 @@ A functional style wrapper for `ReadOnlyMemory<'T>`, allowing zero-allocation sl
 
 ### `ofArray`
 
-Wraps an entire array into a `ReadOnlyMemory<'T>`. This provides a view of the array without copying its elements.
+Wraps an entire array into a `ReadOnlyMemory<'T>`. This provides a view of the array without 
+copying its elements.
+
+```fsharp
+> let mem = Mem.ofArray [|1; 2; 3; 4; 5|];;
+val mem : ReadOnlyMemory<int> = 1 2 3 4 5
+```
 
 ### `ofArraySlice`
 
-Creates a `ReadOnlyMemory<'T>` from a specific range of an array. It takes a start index and a length, allowing you to work with a sub-section of the array efficiently.
+Creates a `ReadOnlyMemory<'T>` from a specific range of an array. It takes a start index and length,
+allowing you to work with a sub-section of the array efficiently.
+
+```fsharp
+> let memSlice = [|1; 2; 3; 4; 5|] |> Mem.ofArraySlice 1 3;;
+val memSlice : ReadOnlyMemory<int> = 2 3 4
+```
 
 ### `ofString`
 
-Converts a string into a `ReadOnlyMemory<char>`. This is useful for performing high-performance string operations without additional allocations.
+Converts a string into a `ReadOnlyMemory<char>`. This is useful for performing high-performance 
+string operations without additional allocations.
+
+```fsharp
+> let memString = Mem.ofString "가나다";;
+val memString : ReadOnlyMemory<char> = '가' '나' '다'
+```
 
 ### `ofStringSlice`
 
-Creates a `ReadOnlyMemory<char>` from a sub-string based on the start index and length. Unlike `String.Substring`, this operation does not allocate a new string on the heap.
+Creates a `ReadOnlyMemory<char>` from a sub-string based on the start index and length.
+Unlike `String.Substring`, this operation does not allocate a new string on the heap.
+
+```fsharp
+> let memStringSlice = "가나다" |> Mem.ofStringSlice 1 2;;
+val memStringSlice : ReadOnlyMemory<char> = '나' '다'
+```
 
 ### `windowed`
 
-Yields a sequence of overlapping slices (windows) of the specified size.
+Yields a sequence of overlapping windows of the specified size.
 
 ```fsharp
 > "Hello" |> Mem.ofString |> Mem.windowed 3 |> Seq.map string
@@ -175,7 +205,7 @@ val it : seq<string> = seq ["Hel"; "ell"; "llo"]
 
 ### `forall`
 
-Returns true if all elements satisfy the given predicate.
+Returns `true` if all elements satisfy the given predicate.
 
 ```fsharp
 > let mem = Mem.ofArray [|1; 2; 3; 4; 5|];;
@@ -187,7 +217,8 @@ val it : bool = true
 
 ### `forall2`
 
-Returns true if all elements satisfy the given predicate.  The predicate takes two arguments, one from each memory block.
+Returns `true` if all elements satisfy the given predicate.  The predicate takes two arguments,
+one from each memory block.
 
 ```fsharp
 > let mem = Mem.ofArray [|1; 2; 3; 4; 5|];;
@@ -215,7 +246,8 @@ val it : string list = ["z"; "z1"; "z2"; "z10"; "z012"; "z21"; "zz"]
 
 ### `iterate`
 
-Generates an infinite sequence by repeatedly applying a function to an initial value. Each element is the result of applying the function to the previous element.
+Generates an infinite sequence by repeatedly applying a function to an initial value. Each element
+is the result of applying the function to the previous element.
 
 ```fsharp
 > Seq.iterate (fun x -> x * 2) 1 |> Seq.take 5 |> Seq.toList;;
@@ -224,7 +256,9 @@ val it : int list = [1; 2; 4; 8; 16]
 
 ### `foldWhileSome`
 
-Similar to `Seq.fold`, but allows early termination. The folding process continues as long as the folder function returns `Some`. If it returns `None`, the sequence processing stops immediately and returns the last state.
+Similar to `Seq.fold`, but allows early termination. The folding process continues as long as 
+the folder function returns `Some`. If it returns `None`, the sequence processing stops immediately
+and returns the last state.
 
 ```fsharp
 > let folder state x =
@@ -239,7 +273,8 @@ val it : int = 10
 
 ### `isOrdered`
 
-Checks if a sequence is sorted according to the specified `SortOrder`, which is one of `Ascending`, `Descending`, `StrictAscending`, or `StrictDescending`.
+Checks if a sequence is sorted according to the specified `SortOrder`, which is one of `Ascending`,
+`Descending`, `StrictAscending`, or `StrictDescending`.
 
 ```fsharp
 > [1; 2; 2; 3] |> Seq.isOrdered Ascending;;
