@@ -41,12 +41,12 @@ module List =
         match source with
         | [] -> []
         | head :: _ ->
-            let rec loop = function
-                | [] -> []
-                | [x] -> [x, head]
-                | x :: y :: rest -> (x, y) :: loop (y :: rest)
+            let rec loop acc = function
+                | [] -> List.rev acc
+                | [x] -> List.rev ((x, head) :: acc)
+                | x :: (y :: _ as rest) -> loop ((x, y) :: acc) rest
 
-            loop source
+            loop [] source
 
     ///
     /// <summary>
