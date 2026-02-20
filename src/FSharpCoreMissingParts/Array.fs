@@ -40,7 +40,7 @@ module Array =
             if lo > hi then None
             else
                 let mid = lo + (hi - lo) / 2
-                match sign <| comparer value source.[mid] with
+                match sign (comparer value source.[mid]) with
                 | 0 -> Some mid
                 | 1 -> loop (mid + 1) hi
                 | _ -> loop lo (mid - 1)

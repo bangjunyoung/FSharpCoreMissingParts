@@ -50,9 +50,10 @@ module Array2D =
     ///
     let ofArray nrows ncols source =
         if Array.length source <> nrows * ncols then
-            invalidArg (nameof source) "must have a length of nrows multiplied by ncols"
+            invalidArg (nameof source) $"must have a length of nrows {nrows} multiplied by ncols {ncols}."
 
         let array2D = Array2D.zeroCreate nrows ncols
+
         source
         |> Array.iteri (fun i elem -> array2D.[i / ncols, i % ncols] <- elem)
 
