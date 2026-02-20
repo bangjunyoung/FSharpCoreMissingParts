@@ -199,8 +199,15 @@ val memStringSlice : ReadOnlyMemory<char> = '나' '다'
 Yields a sequence of overlapping windows of the specified size.
 
 ```fsharp
-> "Hello" |> Mem.ofString |> Mem.windowed 3 |> Seq.map string
-val it : seq<string> = seq ["Hel"; "ell"; "llo"]
+> "Hello" |> Mem.ofString |> Mem.windowed 3;;
+val it: Mem<char> seq =
+  seq [Hel {IsEmpty = false;
+            Length = 3;
+            Span = ?;}; ell {IsEmpty = false;
+                             Length = 3;
+                             Span = ?;}; llo {IsEmpty = false;
+                                              Length = 3;
+                                              Span = ?;}]
 ```
 
 ### `forall`
