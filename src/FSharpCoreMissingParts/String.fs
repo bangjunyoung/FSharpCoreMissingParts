@@ -40,9 +40,12 @@ module String =
     /// <returns>The resulting string.</returns>
     ///
     let ofSeq (source: seq<char>) =
-        (StringBuilder(Seq.length source), source)
-        ||> Seq.fold (fun builder c -> builder.Append(c))
-        |> string
+        match source with
+        | :? array<char> as s -> String s
+        | _ ->
+            (StringBuilder(Seq.length source), source)
+            ||> Seq.fold (fun builder c -> builder.Append(c))
+            |> string
 
     ///
     /// <summary>
