@@ -274,7 +274,7 @@ and returns the last state.
     else None;;
 val folder : state:int -> x:int -> int option
 
-> [1 .. 10] |> Seq.foldSome folder 0;;
+> [1 .. 10] |> Seq.foldWhileSome folder 0;;
 val it : int = 10
 ```
 
