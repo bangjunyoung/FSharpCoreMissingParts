@@ -49,8 +49,8 @@ let ``stackalloc throws IndexOutOfRangeException if index is out of bounds`` () 
 let ``toReadOnlySpan returns a read-only span with the same contents`` () =
     let arr = [|1; 2; 3|]
     let span = Span arr
-    span[0] <- 42
     let readOnlySpan = Span.toReadOnlySpan span
+    span[0] <- 42
     Assert.That(readOnlySpan.Length, Is.EqualTo(3))
     Assert.That(readOnlySpan[0], Is.EqualTo(42))
     Assert.That(readOnlySpan[1], Is.EqualTo(2))
