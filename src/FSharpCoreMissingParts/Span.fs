@@ -29,9 +29,32 @@ open System
 open Microsoft.FSharp.NativeInterop
 
 module Span =
+
+    ///
+    /// <summary>
+    /// Allocates a block of memory on the stack and returns it as a span.
+    /// The memory is automatically freed when the method returns.
+    /// The type parameter 'T must be an unmanaged type.
+    /// </summary>
+    ///
+    /// <param name="length">The number of elements to allocate.</param>
+    ///
+    /// <returns>A span representing the allocated memory.</returns>
+    ///
     #nowarn "9"
     let inline stackalloc<'T when 'T : unmanaged> length =
         Span<'T>(NativePtr.toVoidPtr (NativePtr.stackalloc<'T> length), length)
 
+    ///
+    /// <summary>
+    /// Converts a mutable span to a read-only span with the same contents.
+    /// The resulting read-only span shares the same underlying memory as the input span,
+    /// so changes to the input span will be reflected in the output span.
+    /// </summary>
+    ///
+    /// <param name="span">The input mutable span.</param>
+    ///
+    /// <returns>A read-only span with the same contents as the input span.</returns>
+    ///
     #nowarn "3391"
     let inline toReadOnlySpan<'T> (span: Span<'T>) : ReadOnlySpan<'T> = span
