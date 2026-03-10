@@ -18,13 +18,19 @@ dotnet add package FSharpCoreMissingParts
 
 ## Usage
 
-To use FSharpCoreMissingParts in your F# project:
+To use FSharpCoreMissingParts in your F# script, you can reference the package like this:
+
+```fsharp
+#r "nuget: FSharpCoreMissingParts";;
+```
+
+To use FSharpCoreMissingParts in your F# project and script, open the namespace first:
 
 ```fsharp
 open FSharpCoreMissingParts
 ```
 
-If you want to use flexible numeric casting:
+Optionally, if you want to use flexible numeric casting and the `^>` operator:
 
 ```fsharp
 open FSharpCoreMissingParts.Casting
@@ -86,16 +92,26 @@ val it : int [] = [|1; 2; 3; 4; 5; 6|]
 A type-safe cast operator that performs flexible numeric conversions.
 
 ```fsharp
-let inline sqrtn n = (n |> float |> sqrt) ^> n
+> open FSharpCoreMissingParts.Casting
+let inline sqrtn n = (n |> float |> sqrt) ^> n;;
+val inline sqrtn:
+  n: ^a -> 'b
+    when ^a: (static member op_Explicit: ^a -> float) and
+         (NumericCast or ^a) :
+           (static member (=>) : NumericCast * ^a -> (float -> 'b))
 
 > sqrtn 25;;
-val it : int = 5
+val it: int = 5
 
 > sqrtn 25I;;
-val it : bigint = 5
+val it: bigint = 5 {IsEven = false;
+                    IsOne = false;
+                    IsPowerOfTwo = false;
+                    IsZero = false;
+                    Sign = 1;}
 
 > sqrtn 25.;;
-val it : double = 5.0
+val it: double = 5.0
 ```
 
 ## CircularList
@@ -148,28 +164,6 @@ by `map`.
 ```fsharp
 > List.crossMap (+) [1; 2] [10; 20];;
 val it: int list = [11; 21; 12; 22]
-```
-
-## Span
-
-### `stackalloc`
-
-Allocates a block of memory on the stack for a specified number of elements. This is useful for temporary buffers that are only needed within the scope of a method, providing high performance without heap allocation.
-
-```fsharp
-let span = Span.stackalloc<int> 3
-span[0] <- 42
-```
-
-### `toReadOnlySpan`
-
-Converts a `Span<'T>` to a `ReadOnlySpan<'T>`, allowing you to work with the data in a read-only context without copying.
-
-```fsharp
-let arr = [|1; 2; 3|]
-let span = Span arr
-span[0] <- 42
-let readOnlySpan = Span.toReadOnlySpan span
 ```
 
 ## Mem
@@ -317,6 +311,28 @@ val it : bool = true
 
 > [3; 3; 2; 1] |> Seq.isOrdered StrictDescending;;
 val it : bool = false
+```
+
+## Span
+
+### `stackalloc`
+
+Allocates a block of memory on the stack for a specified number of elements. This is useful for temporary buffers that are only needed within the scope of a method, providing high performance without heap allocation.
+
+```fsharp
+let span = Span.stackalloc<int> 3
+span[0] <- 42
+```
+
+### `toReadOnlySpan`
+
+Converts a `Span<'T>` to a `ReadOnlySpan<'T>`, allowing you to work with the data in a read-only context without copying.
+
+```fsharp
+let arr = [|1; 2; 3|]
+let span = Span arr
+let readOnlySpan = Span.toReadOnlySpan span
+span[0] <- 42
 ```
 
 ## String
